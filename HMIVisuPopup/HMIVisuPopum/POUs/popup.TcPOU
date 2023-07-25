@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="popup" Id="{5414fea7-f943-44c1-9c82-35278987b2fa}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM popup
+VAR
+	fbOpenMessageDialogEmergency: R_trig;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbOpenMessageDialogEmergency(CLK := gvl.emergency);
+IF fbOpenMessageDialogEmergency.Q  THEN
+	OpenMessageDialogEmergency();
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="OpenMessageDialogEmergency" Id="{3ae91159-14b9-47ad-a004-6c61d03684fc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION OpenMessageDialogEmergency : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	stMyRect : VisuElems.VisuStructSimpleRectangle;
+	pTempClientData : POINTER TO VisuElems.VisuStructClientData;
+	pLastClientData : POINTER TO VisuElems.VisuStructClientData;
+	nIteratorSave : INT;
+	nCounter : INT;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[nIteratorSave := VisuElems.VisuElemBase.Visu_Globals.g_ClientManager.SaveIteration(); 
+VisuElems.VisuElemBase.Visu_Globals.g_ClientManager.BeginIteration();
+
+GVL.iDialogManager := VisuElems.VisuElemBase.g_VisuManager.GetDialogManager();
+
+// Assign the argument in all currently active clients
+pTempClientData := VisuElems.VisuElemBase.Visu_Globals.g_ClientManager.GetNextClient();
+
+// Open Dialog on all Clients
+GVL.iMessageDialog := GVL.iDialogManager.GetDialog('Popup'); // dialog to be handled is specified
+IF GVL.iMessageDialog <> 0 THEN
+	stMyRect.ptTopLeft.iX := 200;
+	stMyRect.ptTopLeft.iY := 100;
+	stMyRect.ptBottomRight.iX := 200;
+	stMyRect.ptBottomRight.iY := 450;
+	GVL.iDialogManager.OpenDialog3(GVL.iMessageDialog, pTempClientData, TRUE, ADR(stMyRect), 0, VisuElems.Visu_InputFlags.GlobalOpenCloseDialog);
+END_IF
+
+VisuElems.VisuElemBase.Visu_Globals.g_ClientManager.RestoreIteration(nIteratorSave);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
